@@ -6,8 +6,6 @@ gast==0.2.2
 grpcio==1.21.1
 h5py==2.9.0
 isort==4.3.21
-Keras-Applications==1.0.8
-Keras-Preprocessing==1.1.0
 kiwisolver==1.1.0
 lazy-object-proxy==1.4.1
 Markdown==3.1.1
@@ -22,10 +20,7 @@ pylint==2.3.1
 pyparsing==2.4.0
 python-dateutil==2.8.0
 six==1.12.0
-tensorboard==1.13.1
 tensorboardX==1.7
-tensorflow==1.13.1
-tensorflow-estimator==1.13.0
 termcolor==1.1.0
 torch==1.2.0
 torchsummary==1.5.1
