@@ -69,7 +69,7 @@ def rotate_angle(image, label, angle_max):
 		angle = np.random.choice(np.linspace(-angle_max, angle_max, num=21), size=())
 
 		# Get parameters for affine transform
-		(h, w) = image.shape[:2]
+		(h, w) = (image.height, image.width)
 		(cX, cY) = (w // 2, h // 2)
 
 		M = cv2.getRotationMatrix2D((cX, cY), angle, 1.0)
@@ -109,7 +109,7 @@ def resize_image(image, expected_size, pad_value, ret_params=False, mode=cv2.INT
 	image (ndarray) with either shape of [H,W,3] for RGB or [H,W] for grayscale.
 	Padding is added so that the content of image is in the center.
 	"""
-	h, w = image.shape[:2]
+	h, w = image.height, image.width
 	if w>h:
 		w_new = int(expected_size)
 		h_new = int(h * w_new / w)
