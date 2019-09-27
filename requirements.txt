@@ -40,8 +40,7 @@ tensorboardX==1.7
 tensorflow==1.13.1
 tensorflow-estimator==1.13.0
 termcolor==1.1.0
-# Editable install with no version control (timm==0.1.14)
--e /home/harsha/anaconda3/envs/humanseg/lib/python3.6/site-packages
+timm==0.1.14
 torch==1.1.0
 torchsummary==1.5.1
 torchvision==0.3.0
