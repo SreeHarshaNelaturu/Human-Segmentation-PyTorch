@@ -31,45 +31,38 @@ def setup(opts):
     return model
 
 
-inputs = {"input_file" : runway.image}
-outputs = {"output_file" : runway.image}
+inputs = {"input_image" : runway.image}
+outputs = {"output_image" : runway.image}
 
 
-@runway.command("Segment Humans", inputs=inputs, outputs=outputs, description="Segments Humans")
+@runway.command("segment_humans", inputs=inputs, outputs=outputs, description="Segments Humans")
 def segment_humans(model, inputs):
-	if torch.cuda.is_available():
-		use_cuda = True
-	else:
-		use_cuda = False
+    frame = inputs["input_image"]
 
-	frame = inputs["input_file"]
-	#image = frame[...,::-1]
-	h, w = frame.height, frame.width
+    #image = frame[...,::-1]
+    h, w = frame.height, frame.width
 
-	# Predict mask
-	X, pad_up, pad_left, h_new, w_new = utils.preprocessing(frame, expected_size=320, pad_value=0)
+    # Predict mask
+    X, pad_up, pad_left, h_new, w_new = utils.preprocessing(frame, expected_size=320, pad_value=0)
 
-	with torch.no_grad():
-		if use_cuda:
-			mask = model(X.cuda())
-			mask = mask[..., pad_up: pad_up+h_new, pad_left: pad_left+w_new]
-			mask = F.interpolate(mask, size=(h,w), mode='bilinear', align_corners=True)
-			mask = F.softmax(mask, dim=1)
-			mask = mask[0,1,...].cpu().numpy()
-		else:
-			mask = model(X)
-			mask = mask[..., pad_up: pad_up+h_new, pad_left: pad_left+w_new]
-			mask = F.interpolate(mask, size=(h,w), mode='bilinear', align_corners=True)
-			mask = F.softmax(mask, dim=1)
-			mask = mask[0,1,...].numpy()
+    with torch.no_grad():
+        if torch.cuda.is_available():
+            mask = model(X.cuda())
+            mask = mask[..., pad_up: pad_up+h_new, pad_left: pad_left+w_new]
+            mask = F.interpolate(mask, size=(h,w), mode='bilinear', align_corners=True)
+            mask = F.softmax(mask, dim=1)
+            mask = mask[0,1,...].cpu().numpy()
+        else:
+            mask = model(X)
+            mask = mask[..., pad_up: pad_up+h_new, pad_left: pad_left+w_new]
+            mask = F.interpolate(mask, size=(h,w), mode='bilinear', align_corners=True)
+            mask = F.softmax(mask, dim=1)
+            mask = mask[0,1,...].numpy()
 
-	image_alpha = utils.draw_matting(frame, mask)
-	final_image = Image.fromarray(image_alpha)
-
-	#img = Image.open('img.png')
-	#img = final_image.convert("RGBA")
-
-	return final_image
+    mask = 255*mask
+    mask = np.expand_dims(mask, axis=2)
+    image_alpha = np.concatenate((frame, mask), axis=2)
+    return image_alpha.astype(np.uint8)
 
 if __name__ == "__main__":
-    runway.run(model_options={"backbone": "resnet18", "checkpoint" : "../asdas/BiSeNet_ResNet18.pth"})
+    runway.run(model_options={"backbone": "mobilenetv2", "checkpoint" : "UNet_MobileNetV2.pth"})
