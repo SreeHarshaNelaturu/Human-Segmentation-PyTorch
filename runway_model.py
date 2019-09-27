@@ -17,13 +17,18 @@ cat = runway.category(choices=["mobilenetv2", "resnet18"], default="mobilenetv2"
 @runway.setup(options={"backbone" : cat, "checkpoint" : runway.file(extension=".pth")})
 def setup(opts):
     model = UNet(backbone=opts["backbone"], num_classes=2)
-    trained_dict = torch.load(opts["checkpoint"], map_location="cpu")['state_dict']
-    model.load_state_dict(trained_dict, strict=False)
-    if torch.cuda.is_available():
-        model.cuda()
-    model.eval()
-    return model
 
+    if torch.cuda.is_available():
+        print("Using CUDA")
+        trained_dict = torch.load(opts["checkpoint"])['state_dict']
+        model.load_state_dict(trained_dict, strict=False)
+        model.cuda()
+    else:
+        print("Using CPU")
+        trained_dict = torch.load(opts["checkpoint"], map_location="cpu")['state_dict']
+        model.load_state_dict(trained_dict, strict=False)
+
+    return model
 
 
 inputs = {"input_file" : runway.image}
@@ -32,7 +37,7 @@ outputs = {"output_file" : runway.image}
 
 @runway.command("Segment Humans", inputs=inputs, outputs=outputs, description="Segments Humans")
 def segment_humans(model, inputs):
-	if torch.cuda.is_available() == True:
+	if torch.cuda.is_available():
 		use_cuda = True
 	else:
 		use_cuda = False
@@ -67,4 +72,4 @@ def segment_humans(model, inputs):
 	return final_image
 
 if __name__ == "__main__":
-    runway.run()
+    runway.run(model_options={"backbone": "resnet18", "checkpoint" : "../asdas/BiSeNet_ResNet18.pth"})
