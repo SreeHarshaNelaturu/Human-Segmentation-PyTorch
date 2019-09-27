@@ -6,4 +6,3 @@ spec:
   cpu: True
 build_steps:
   - pip install -r requirements.txt
-  - pip install -e models/pytorch-image-models
