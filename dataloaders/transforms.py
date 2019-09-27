@@ -93,8 +93,8 @@ def rotate_angle(image, label, angle_max):
 #------------------------------------------------------------------------------
 def random_noise(image, std):
 	if std:
-		noise = np.random.normal(0, std, size=image.shape)
-		image = image + noise
+		noise = np.random.normal(0, std, size=[image.height, image.width])
+		image = np.array(image) + noise
 		image[image<0] = 0
 		image[image>255] = 255
 		image = image.astype(np.uint8)
@@ -113,7 +113,7 @@ def resize_image(image, expected_size, pad_value, ret_params=False, mode=cv2.INT
 	if w>h:
 		w_new = int(expected_size)
 		h_new = int(h * w_new / w)
-		image = cv2.resize(image, (w_new, h_new), interpolation=mode)
+		image = cv2.resize(np.array(image), (w_new, h_new), interpolation=mode)
 
 		pad_up = (w_new - h_new) // 2
 		pad_down = w_new - h_new - pad_up

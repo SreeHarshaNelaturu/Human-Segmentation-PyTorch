@@ -23,8 +23,12 @@ def setup(opts):
         model.cuda()
     model.eval()
     return model
+
+
+
 inputs = {"input_file" : runway.image}
 outputs = {"output_file" : runway.image}
+
 
 @runway.command("Segment Humans", inputs=inputs, outputs=outputs, description="Segments Humans")
 def segment_humans(model, inputs):
@@ -36,7 +40,6 @@ def segment_humans(model, inputs):
 	frame = inputs["input_file"]
 	#image = frame[...,::-1]
 	h, w = frame.height, frame.width
-
 
 	# Predict mask
 	X, pad_up, pad_left, h_new, w_new = utils.preprocessing(frame, expected_size=320, pad_value=0)
@@ -59,10 +62,9 @@ def segment_humans(model, inputs):
 	final_image = Image.fromarray(image_alpha)
 
 	#img = Image.open('img.png')
-	img = final_image.convert("RGBA")
+	#img = final_image.convert("RGBA")
 
-
-	return img
+	return final_image
 
 if __name__ == "__main__":
-    runway.run(model_options={"backbone" : "mobilenetv2", "checkpoint" : "./UNet_MobileNetV2.pth"})
+    runway.run()
