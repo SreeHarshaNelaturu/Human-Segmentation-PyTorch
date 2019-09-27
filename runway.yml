@@ -5,7 +5,5 @@ spec:
   gpu: True
   cpu: True
 build_steps:
-  - git submodule sync
-  - git submodule update --init --recursive
   - pip install -r requirements.txt
   - pip install -e models/pytorch-image-models
