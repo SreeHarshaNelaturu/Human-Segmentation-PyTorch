@@ -34,7 +34,7 @@ def draw_transperency(image, mask, color_f, color_b):
 	alpha = np.zeros_like(image, dtype=np.uint8)
 	alpha[mask==1, :] = color_f
 	alpha[mask==0, :] = color_b
-	image_alpha = cv2.add(np.array(image), alpha)
+	image_alpha = cv2.add(image, alpha)
 	return image_alpha
 
 
@@ -50,7 +50,7 @@ def draw_matting(image, mask):
 	mask = np.expand_dims(mask, axis=2)
 	mask = np.tile(mask, (1,1,3))
 	mask = mask.astype(np.uint8)
-	image_matting = cv2.add(np.array(image), mask)
+	image_matting = cv2.add(image, mask)
 	return image_matting
 
 
@@ -65,5 +65,5 @@ def draw_fore_to_back(image, mask, background, kernel_sz=13, sigma=0):
 	mask_filtered = cv2.GaussianBlur(mask, (kernel_sz, kernel_sz), sigma)
 	mask_filtered = np.expand_dims(mask_filtered, axis=2)
 	mask_filtered = np.tile(mask_filtered, (1,1,3))
-	image_alpha = np.array(image)*mask_filtered + background*(1-mask_filtered)
+	image_alpha = image*mask_filtered + background*(1-mask_filtered)
 	return image_alpha.astype(np.uint8)

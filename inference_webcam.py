@@ -11,7 +11,7 @@ from base import VideoInference
 #------------------------------------------------------------------------------
 parser = argparse.ArgumentParser(description="Arguments for the script")
 
-parser.add_argument('--use_cuda', action='store_true', default=True,
+parser.add_argument('--use_cuda', action='store_true', default=False,
                     help='Use GPU acceleration')
 
 parser.add_argument('--input_size', type=int, default=320,
@@ -27,7 +27,7 @@ args = parser.parse_args()
 #	Main execution
 #------------------------------------------------------------------------------
 # Build model
-model = UNet(backbone="resnet18", num_classes=2)
+model = UNet(backbone="mobilenetv2", num_classes=2)
 trained_dict = torch.load(args.checkpoint, map_location="cpu")['state_dict']
 model.load_state_dict(trained_dict, strict=False)
 if args.use_cuda:

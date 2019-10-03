@@ -37,10 +37,10 @@ outputs = {"output_image" : runway.image}
 
 @runway.command("segment_humans", inputs=inputs, outputs=outputs, description="Segments Humans")
 def segment_humans(model, inputs):
-    frame = inputs["input_image"]
+    frame = np.array(inputs["input_image"])
 
     #image = frame[...,::-1]
-    h, w = frame.height, frame.width
+    h, w = frame.shape[0], frame.shape[1]
 
     # Predict mask
     X, pad_up, pad_left, h_new, w_new = utils.preprocessing(frame, expected_size=320, pad_value=0)
@@ -65,4 +65,4 @@ def segment_humans(model, inputs):
     return image_alpha.astype(np.uint8)
 
 if __name__ == "__main__":
-    runway.run(model_options={"backbone": "mobilenetv2", "checkpoint" : "UNet_MobileNetV2.pth"})
+    runway.run(model_options={"backbone": "mobilenetv2", "checkpoint" : "../asdas/UNet_MobileNetV2.pth"})
