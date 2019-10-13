@@ -1,4 +1,4 @@
-[![Open in RunwayML Badge](https://open-app.runwayml.com/gh-badge.svg)](https://open-app.runwayml.com/?model=sree_harsha/Human-Segmentation)
+[![Open in RunwayML Badge](https://open-app.runwayml.com/gh-badge.svg)](https://open-app.runwayml.com/?model=runway/Human-Segmentation)
 # Human-Segmentation-PyTorch
 Human segmentation [models](https://github.com/AntiAegis/Semantic-Segmentation-PyTorch#supported-networks), [training](https://github.com/AntiAegis/Semantic-Segmentation-PyTorch#training)/[inference](https://github.com/AntiAegis/Semantic-Segmentation-PyTorch#inference) code, and [trained weights](https://github.com/AntiAegis/Semantic-Segmentation-PyTorch#benchmark), implemented in PyTorch.
 
